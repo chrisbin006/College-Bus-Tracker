@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TrackMyBus - Jyothi College Bus Tracker</title>
+<meta name="description" content="Jyothi College Bus Tracker. Pick your stop, see if your bus is on time or late.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚌</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Manrope:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#0a0f1f;--bg2:#10182f;--pn:#141d38;--ln:#26325a;--tx:#f4f1ea;--mu:#9aa6c9;--gold:#d9b25f;--gold2:#f2d794;--ok:#3fd6a0;--warn:#ff6b6b;--sea:#0c2a52;--land:#173b3a;--land2:#1f4d48;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#faf7f0;--bg2:#f1ece0;--pn:#fff;--ln:#e0d8c4;--tx:#1a1f33;--mu:#5d6684;--gold:#9a7421;--gold2:#b8902f;--ok:#0b8f66;--warn:#d63c3c;--sea:#cfe3f3;--land:#e3ecd6;--land2:#d3e2c3}}
+:root[data-theme="dark"]{--bg:#0a0f1f;--bg2:#10182f;--pn:#141d38;--ln:#26325a;--tx:#f4f1ea;--mu:#9aa6c9;--gold:#d9b25f;--gold2:#f2d794;--ok:#3fd6a0;--warn:#ff6b6b;--sea:#0c2a52;--land:#173b3a;--land2:#1f4d48}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px));height:100%}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.6 Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:700;margin:0;letter-spacing:-.02em;line-height:1.1}
+a{color:inherit;text-decoration:none}.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--ln)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font:700 22px Fraunces,serif}.logo b{color:var(--gold)}.sub{font:600 13px Manrope,sans-serif;color:var(--mu);letter-spacing:0}@media(max-width:700px){nav .sub{display:none}}
+.links{display:flex;gap:28px;align-items:center;font-size:14px;color:var(--mu)}.links a:hover{color:var(--tx)}
+.btn{display:inline-block;border:0;cursor:pointer;font:600 14px Manrope,sans-serif;padding:12px 22px;border-radius:99px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405;transition:.25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px var(--gold)}.btn.ghost{background:none;border:1px solid var(--ln);color:var(--tx)}.btn.ghost:hover{border-color:var(--gold);box-shadow:none}
+.hero{padding:170px 0 90px;background:radial-gradient(900px 500px at 80% 0,color-mix(in srgb,var(--gold) 18%,transparent),transparent),var(--bg)}
+.eyebrow{display:inline-block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);border:1px solid var(--ln);padding:6px 14px;border-radius:99px;margin-bottom:22px}
+.hero h1{font-size:clamp(40px,7vw,78px);max-width:860px}.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{max-width:560px;color:var(--mu);font-size:18px;margin:22px 0 32px}.cta{display:flex;gap:12px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:16px;overflow:hidden;margin-top:64px}
+.stats div{background:var(--bg2);padding:22px}.stats b{display:block;font:700 34px Fraunces,serif;color:var(--gold)}.stats span{color:var(--mu);font-size:13px}
+section.s{padding:90px 0}section.s.alt{background:var(--bg2)}
+.head{max-width:620px;margin-bottom:44px}.head h2{font-size:clamp(30px,4.5vw,46px)}.head p{color:var(--mu);margin:14px 0 0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:var(--pn);border:1px solid var(--ln);border-radius:18px;padding:28px;transition:.3s}.card:hover{border-color:var(--gold);transform:translateY(-4px)}
+.card i{font-style:normal;font-size:28px}.card h3{font-size:21px;margin:14px 0 8px}.card p{margin:0;color:var(--mu);font-size:15px}
+.num{font:700 15px Fraunces,serif;color:var(--gold);letter-spacing:.1em}
+.tracker{display:grid;grid-template-columns:380px 1fr;gap:20px;align-items:start}
+.panel{background:var(--pn);border:1px solid var(--ln);border-radius:20px;padding:22px}
+.mapbox{background:var(--sea);border:1px solid var(--ln);border-radius:20px;overflow:hidden;position:relative;height:min(78vh,660px);touch-action:none;cursor:grab;user-select:none}.mapbox:active{cursor:grabbing}
+#tiles{position:absolute;inset:0}#tiles img{position:absolute;width:256px;height:256px;max-width:none}#tiles.dk img{filter:invert(.92) hue-rotate(180deg) brightness(.95) contrast(.9)}#ov{position:absolute;inset:0;width:100%;height:100%}
+.ctl{position:absolute;right:12px;top:12px;display:flex;flex-direction:column;gap:8px}.ctl button{width:42px;height:42px;border-radius:12px;border:1px solid var(--ln);background:var(--pn);color:var(--tx);font-size:18px;cursor:pointer}.ctl button:hover{border-color:var(--gold)}
+.attr{position:absolute;left:8px;bottom:6px;font-size:11px;background:rgba(255,255,255,.8);color:#222;padding:2px 6px;border-radius:6px}
+#mnote{position:absolute;left:12px;right:68px;top:12px;background:var(--pn);border:1px solid var(--gold);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--mu)}
+label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:0 0 14px}
+input,select{width:100%;margin-top:6px;padding:12px 14px;border-radius:10px;border:1px solid var(--ln);background:var(--bg);color:var(--tx);font:inherit;font-size:15px;text-transform:none;letter-spacing:0}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px}
+.bus{border:1px solid var(--ln);border-radius:14px;padding:14px;margin-top:12px;cursor:pointer;background:var(--bg);transition:.2s}.bus.on{border-color:var(--gold)}
+.bus .t{display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.tag{font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px}.tag.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}.tag.late{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}.tag.done{background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold)}
+.bus p{margin:8px 0 0;font-size:14px;color:var(--mu)}.bus p b{color:var(--tx)}
+.bar{height:5px;border-radius:9px;background:var(--ln);margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.err{color:var(--warn);min-height:22px;font-size:14px}.mu{color:var(--mu);font-size:13px}
+.modal{position:fixed;inset:0;z-index:40;background:rgba(5,8,18,.7);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}.modal.on{display:flex}
+.modal .panel{width:100%;max-width:420px}.tabs{display:flex;gap:6px;margin-bottom:18px}.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--ln);background:none;color:var(--mu);font:600 14px Manrope,sans-serif;cursor:pointer}.tabs button.on{background:var(--gold);color:#1a1405;border-color:var(--gold)}
+#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--gold);color:#1a1405;padding:13px 20px;border-radius:14px;font-weight:700;opacity:0;pointer-events:none;transition:.3s;max-width:90%;z-index:60}#toast.on{opacity:1;transform:translate(-50%,0)}
+footer{border-top:1px solid var(--ln);padding:36px 0;color:var(--mu);font-size:14px}footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.swatch{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:8px;vertical-align:-1px}
+.row{border-top:1px solid var(--ln);padding:12px 0;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:4px 12px}.row:first-child{border:0}.row small{grid-column:1/-1;color:var(--mu);font-size:13px}.row.on{background:color-mix(in srgb,var(--gold) 8%,transparent)}
+.you{border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:16px;background:var(--bg)}.you a{display:inline-block;margin:8px 8px 0 0;font-size:13px;font-weight:700;color:var(--gold)}
+@keyframes pl{0%{r:8;opacity:.6}100%{r:26;opacity:0}}.pulse{animation:pl 1.8s infinite}
+[hidden]{display:none!important}
+:root[data-theme="light"]{--bg:#faf7f0;--bg2:#f1ece0;--pn:#fff;--ln:#e0d8c4;--tx:#1a1f33;--mu:#5d6684;--gold:#9a7421;--gold2:#b8902f;--ok:#0b8f66;--warn:#d63c3c;--sea:#cfe3f3;--land:#e3ecd6;--land2:#d3e2c3}
+#login{position:fixed;inset:0;z-index:100;overflow:auto;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:40px;padding:calc(40px + env(safe-area-inset-top,0px)) 6vw calc(130px + env(safe-area-inset-bottom,0px));background:radial-gradient(1000px 600px at 15% 10%,color-mix(in srgb,var(--gold) 20%,transparent),transparent),var(--bg)}
+.orb{position:fixed;border-radius:50%;filter:blur(60px);opacity:.35;animation:fl 12s ease-in-out infinite;pointer-events:none}
+.o1{width:320px;height:320px;background:var(--gold);top:-80px;right:10%}.o2{width:260px;height:260px;background:#4285f4;bottom:15%;left:-60px;animation-delay:-4s}.o3{width:200px;height:200px;background:var(--ok);bottom:-40px;right:25%;animation-delay:-8s}
+@keyframes fl{50%{transform:translate(30px,-40px) scale(1.15)}}
+@keyframes up{from{opacity:0;transform:translateY(28px)}}
+.lhero,.lcard{position:relative;animation:up .9s cubic-bezier(.2,.8,.2,1) both}.lcard{animation-delay:.15s;background:color-mix(in srgb,var(--pn) 85%,transparent);backdrop-filter:blur(16px);border:1px solid var(--ln);border-radius:24px;padding:32px;max-width:440px;width:100%;justify-self:center;box-shadow:0 30px 80px -30px rgba(0,0,0,.6)}
+.lhero h1{font-size:clamp(38px,6vw,68px);margin:22px 0 16px}.lhero h1 em{font-style:normal;color:var(--gold)}.lhero p{color:var(--mu);max-width:460px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.chips span{border:1px solid var(--ln);border-radius:99px;padding:7px 14px;font-size:13px;background:var(--pn)}
+.road{position:fixed;left:0;right:0;bottom:calc(36px + env(safe-area-inset-bottom,0px));height:4px;background:repeating-linear-gradient(90deg,var(--ln) 0 28px,transparent 28px 52px);animation:rd 1s linear infinite}
+@keyframes rd{to{background-position:52px 0}}
+.lbus{position:absolute;bottom:4px;font-size:56px;line-height:1;animation:drive 12s linear infinite}
+@keyframes drive{from{left:100%}to{left:-100px}}
+#site:not([hidden]){animation:fin .8s both}@keyframes fin{from{opacity:0}}
+.hero .eyebrow,.hero h1,.hero p,.hero .cta,.stats{animation:up .9s cubic-bezier(.2,.8,.2,1) both}.hero h1{animation-delay:.1s}.hero p{animation-delay:.2s}.hero .cta{animation-delay:.3s}.stats{animation-delay:.4s}
+.fb{position:absolute;right:24px;top:-10px;font-size:130px;animation:bob 4s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-18px) rotate(-3deg)}}.hero .wrap{position:relative}
+.rv{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+@media(max-width:900px){#login{grid-template-columns:1fr;gap:28px}.fb{display:none}}
+@media(max-width:900px){.mapbox{height:480px}.tracker{grid-template-columns:1fr}.links a.h{display:none}}
+</style></head>
+<body>
+<div id="site" hidden>
+<nav><div class="wrap"><a class="logo" href="#top">Track<b>My</b>Bus<small class="sub"> - Jyothi College Bus Tracker</small></a>
+<div class="links"><button class="btn ghost" id="theme" type="button" aria-label="Toggle light or dark theme" style="padding:8px 14px">🌓</button><a class="h" href="#features">Features</a><a class="h" href="#how">How it works</a><a class="h" href="#track">Live tracker</a><a class="h" href="#livemap">Live map</a><span id="navauth"></span></div></div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+<span class="eyebrow">Jyothi College Bus Tracker</span>
+<h1>Know exactly where your <em>college bus</em> is. Right now.</h1>
+<p>Choose your pickup and final stop from every town and village on the route. See which bus is coming, whether it is on time or late, and when it reaches college.</p>
+<div class="fb" aria-hidden="true">🚌</div><div class="cta"><a class="btn" href="#track">Open live tracker</a><a class="btn ghost" href="#how">How it works</a></div>
+<div class="stats"><div><b id="sN">0</b><span>Towns & villages</span></div><div><b id="sB">0</b><span>College buses</span></div><div><b>Live</b><span>Status every 3 seconds</span></div><div><b>2</b><span>Districts covered</span></div></div>
+</div></header>
+
+<section class="s" id="features"><div class="wrap"><div class="head"><h2>Built for students who hate waiting</h2><p>Everything you need to plan the morning, nothing you don't.</p></div>
+<div class="grid3">
+<div class="card"><i>📍</i><h3>Every village covered</h3><p>Towns and villages across Thrissur and Palakkad, from Chavakkad to Walayar.</p></div>
+<div class="card"><i>⏱️</i><h3>On time or late, clearly</h3><p>Each bus shows its number, delay in minutes, and ETA to your stop and to college.</p></div>
+<div class="card"><i>🗺️</i><h3>Live map</h3><p>Watch your bus move along the real route between your pickup and final stop.</p></div>
+<div class="card"><i>🔔</i><h3>Arrival alerts</h3><p>Get a notice when your bus is close to your stop or has reached college.</p></div>
+<div class="card"><i>💾</i><h3>Remembers your route</h3><p>Sign in once and your pickup and final stop are ready every morning.</p></div>
+<div class="card"><i>📱</i><h3>Works on any phone</h3><p>No app to install. Open the page and track.</p></div></div></div></section>
+
+<section class="s alt" id="how"><div class="wrap"><div class="head"><h2>Three steps</h2></div>
+<div class="grid3"><div class="card"><span class="num">01</span><h3>Create an account</h3><p>Takes ten seconds. Just a name, username and password.</p></div>
+<div class="card"><span class="num">02</span><h3>Pick your stops</h3><p>Select where you board and where you get off.</p></div>
+<div class="card"><span class="num">03</span><h3>Watch it live</h3><p>See each matching bus, its delay, and its arrival at college.</p></div></div></div></section>
+
+<section class="s" id="track"><div class="wrap"><div class="head"><h2>Live tracker</h2><p>All buses reach college by 8:45 AM and leave college between 4:10 and 4:15 PM. Select your pickup and final stop; buses that serve both appear below and on the map.</p></div>
+<div class="tracker" id="app">
+<div class="panel"><h3 style="font-size:24px" id="hi"></h3>
+<p class="mu" style="margin:4px 0 18px">Demo mode: bus movement is simulated at 20x speed until real GPS devices are connected.</p>
+<div class="tabs" id="modeTabs"><button type="button" id="mAM">🌅 Morning · to college</button><button type="button" id="mPM">🌇 Evening · to home</button></div>
+<div class="you"><button class="btn" id="locBtn" type="button">📍 Use my live location</button> <button class="btn ghost" id="alBtn" type="button" style="padding:10px 16px;margin-top:8px">🔔 Alerts</button> <button class="btn ghost" id="shBtn" type="button" style="padding:10px 16px;margin-top:8px">Share status</button> <button class="btn ghost" id="demoBtn" type="button" style="padding:10px 16px;margin-top:8px"></button><div id="youmsg" class="mu" style="margin-top:10px">Turn on location to see your distance to the pickup stop and when to leave.</div></div>
+<details class="you" id="drv"><summary style="cursor:pointer;font-weight:800">🧑‍✈️ Driver mode</summary><p class="mu" style="margin:10px 0">Drivers: share your bus's real GPS so students see the true position and delay.</p><select id="dbus"></select><button class="btn" id="dgo" type="button" style="margin-top:10px">Start sharing</button><div id="dmsg" class="mu" style="margin-top:8px"></div></details>
+<label>Pickup stop<select id="pk"></select></label><label>Final stop<select id="fn"></select></label>
+<div class="err" id="rerr"></div><div id="buses"></div><a class="btn ghost" href="#livemap" style="margin-top:14px;width:100%;text-align:center">📍 See route on the map ↓</a></div>
+<div class="panel" id="all"></div></div></div></section>
+<section class="s alt" id="livemap"><div class="wrap"><div class="head"><h2>Live route map</h2><p>Every bus on its road route. Drag to move, tap a bus to select it, and use ⟲ to reset the view. Your pickup and final stop stay as you set them.</p></div>
+<div class="mapbox" id="map" aria-label="Map of Thrissur and Palakkad with live buses"></div></div></section>
+
+<footer><div class="wrap"><span>© 2026 TrackMyBus - Jyothi College Bus Tracker</span><span>Stop coordinates are approximate. Verify with your transport office.</span></div></footer></div>
+
+<div id="login"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<div class="lhero"><div class="logo" style="font-size:28px">Track<b>My</b>Bus<small class="sub" style="display:block"> - Jyothi College Bus Tracker</small></div><h1>Your college bus, <em>live</em>.</h1><p>Sign in to see every bus between Thrissur and Palakkad, whether it is on time or late, and when it reaches college.</p><div class="chips"><span>📍 44 stops</span><span>🚌 9 buses</span><span>⏱ Live ETA</span></div></div>
+<div class="lcard"><h3 style="font-size:28px;margin-bottom:18px">Welcome</h3><div id="authbox"></div></div>
+<div class="road" aria-hidden="true"><div class="lbus">🚌</div></div></div>
+<div id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const SPEED=20,KMH=38,DWELL=8;
+/* ---- places: name, lat, lng, district ---- */
+/* Stops and routes now come from the Java server (GET /api/data). */
+const DATA=(()=>{const x=new XMLHttpRequest();x.open("GET","/api/data",false);x.send();return JSON.parse(x.responseText)})();
+const PL=DATA.stops.map(([n,la,lg,d],i)=>({i,n,la,lg,d}));
+const ID=n=>PL.find(p=>p.n===n).i,C=ID("Jyothi Engineering College");
+const hav=(a,b)=>{const t=Math.PI/180,x=Math.sin((b.la-a.la)*t/2)**2+Math.cos(a.la*t)*Math.cos(b.la*t)*Math.sin((b.lg-a.lg)*t/2)**2;return 12742*Math.asin(Math.sqrt(x))*1.3};
+/* ---- buses ---- */
+const RT=DATA.routes.map(r=>[r.no,r.stops,r.off]);
+const hhmm=m=>String(Math.floor(m/60)%24).padStart(2,"0")+":"+String(((m%60)+60)%60).padStart(2,"0");
+const due=x=>{const m=+x.dep.slice(0,2)*60+ +x.dep.slice(3)+Math.round(x.dur);return String(Math.floor(m/60)%24).padStart(2,"0")+":"+String(m%60).padStart(2,"0")};
+class Bus{
+  constructor(no,names,off,pm){this.no=no;this.pm=pm;this.live=null;this.s=names.map(ID);this.off=off*4+2;this.cum=[0];
+    for(let k=1;k<this.s.length;k++)this.cum.push(this.cum[k-1]+hav(PL[this.s[k-1]],PL[this.s[k]])/KMH*60);
+    this.dur=this.cum.at(-1);this.per=this.dur+DWELL;this.dep=pm?(+no.slice(4)%2?"16:15":"16:10"):hhmm(525-Math.round(this.dur))}
+  /* delay in minutes drifts smoothly over time, so each bus is sometimes late */
+  lag(t){return Math.max(0,3.5+4.5*Math.sin(t/37+this.off*1.7)+2*Math.sin(t/11+this.off))}
+  get isLive(){return !!this.live&&Date.now()-this.live.t<45000}
+  prog(la,lg){let best=1e9,mm=0;for(let k=1;k<this.s.length;k++){const A=PL[this.s[k-1]],B=PL[this.s[k]],dx=B.lg-A.lg,dy=B.la-A.la,f=Math.max(0,Math.min(1,((lg-A.lg)*dx+(la-A.la)*dy)/(dx*dx+dy*dy||1))),d=Math.hypot(lg-(A.lg+dx*f),la-(A.la+dy*f));if(d<best){best=d;mm=this.cum[k-1]+f*(this.cum[k]-this.cum[k-1])}}return mm}
+  state(t){if(this.isLive){const m=this.prog(this.live.la,this.live.lg),n=new Date(),sch=n.getHours()*60+n.getMinutes()+n.getSeconds()/60-(+this.dep.slice(0,2)*60+ +this.dep.slice(3)),lag=sch>=0&&sch<=this.dur+30?Math.max(0,Math.min(60,sch-m)):0;return{m,lag,arrived:m>=this.dur-.3,wait:false,live:true}}
+    if(!DEMO){const n=new Date(),m=n.getHours()*60+n.getMinutes()+n.getSeconds()/60-(+this.dep.slice(0,2)*60+ +this.dep.slice(3));return{m,lag:0,arrived:m>=this.dur,wait:m<0,live:false,tt:true}}
+    const ph=(t+this.off*7)%this.per,lag=this.lag(t),m=ph-lag;return{m,lag,arrived:m>=this.dur,wait:m<0}}
+  pos(m){if(this.isLive)return this.live;m=Math.max(0,Math.min(m,this.dur));
+    if(this.road){const f=m/this.dur*this.rl.at(-1);let k=1;while(k<this.rl.length-1&&this.rl[k]<f)k++;const g=(f-this.rl[k-1])/((this.rl[k]-this.rl[k-1])||1),a=this.road[k-1],b=this.road[k];return{la:a[0]+(b[0]-a[0])*g,lg:a[1]+(b[1]-a[1])*g}}
+    let k=1;while(k<this.cum.length-1&&this.cum[k]<m)k++;
+    const f=(m-this.cum[k-1])/((this.cum[k]-this.cum[k-1])||1),a=PL[this.s[k-1]],b=PL[this.s[k]];return{la:a.la+(b.la-a.la)*f,lg:a.lg+(b.lg-a.lg)*f}}
+  setRoad(g){this.road=g;this.rl=[0];for(let k=1;k<g.length;k++)this.rl.push(this.rl[k-1]+hav({la:g[k-1][0],lg:g[k-1][1]},{la:g[k][0],lg:g[k][1]}))}
+  serves(a,b){const i=this.s.indexOf(a),j=this.s.indexOf(b);return i>=0&&j>i}
+}
+const AM=RT.map(r=>new Bus(...r,false)),PM=RT.map(r=>new Bus(r[0],[...r[1]].reverse(),r[2],true)),nowH=new Date().getHours()+new Date().getMinutes()/60;
+let isPM=nowH>=12,BUSES=isPM?PM:AM,DEMO=!((nowH>=6&&nowH<=9)||(nowH>=15.75&&nowH<=18.5));
+$("#sN").textContent=PL.length;$("#sB").textContent=BUSES.length;
+/* ---- map ---- */
+let sel=null,hl=null,loc=null,wid=null;const COL=["#ff6b6b","#4dd0e1","#ffd54f","#a78bfa","#66bb6a","#ff9f43","#f06292","#4fc3f7","#c0ca33"];
+const mapEl=$("#map"),TS=256,TC=new Map();let V={la:10.65,lg:76.3,z:9},drag=null,tileOk=0,tileErr=0,busy=0,roadsOn=0;
+const proj=(la,lg,z)=>{const n=TS*2**z,q=Math.sin(la*Math.PI/180);return[(lg+180)/360*n,(.5-Math.log((1+q)/(1-q))/(4*Math.PI))*n]};
+const unp=(x,y,z)=>{const n=TS*2**z;return[Math.atan(Math.sinh(Math.PI*(1-2*y/n)))*180/Math.PI,x/n*360-180]};
+const MW=()=>mapEl.clientWidth||600,MH=()=>mapEl.clientHeight||480,isDark=()=>getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()==="#0a0f1f";
+const P=(la,lg)=>{const a=proj(la,lg,V.z),c=proj(V.la,V.lg,V.z);return[a[0]-c[0]+MW()/2,a[1]-c[1]+MH()/2]};
+const cur=()=>[+$("#pk").value,+$("#fn").value];
+function redraw(){if(busy)return;busy=1;requestAnimationFrame(()=>{busy=0;drawMap(...cur())})}
+function zoom(d){V.z=Math.max(8,Math.min(16,V.z+d));redraw()}
+function fit(pts){let a=90,b=-90,c=180,d=-180;pts.forEach(([la,lg])=>{a=Math.min(a,la);b=Math.max(b,la);c=Math.min(c,lg);d=Math.max(d,lg)});V.la=(a+b)/2;V.lg=(c+d)/2;let z=16;for(;z>8;z--){const p=proj(b,c,z),q=proj(a,d,z);if(q[0]-p[0]<MW()-100&&q[1]-p[1]<MH()-100)break}V.z=z}
+function fitRoute(){const[a,b]=cur(),B=BUSES.find(x=>x.no===sel);const ids=B&&B.serves(a,b)?B.s.slice(B.s.indexOf(a),B.s.indexOf(b)+1):[a,b];fit(ids.map(i=>[PL[i].la,PL[i].lg]));redraw()}
+function mapInit(){if($("#ov"))return;
+  mapEl.innerHTML=`<div id="tiles"></div><svg id="ov"></svg><div class="ctl"><button type="button" id="zi" aria-label="Zoom in">+</button><button type="button" id="zo" aria-label="Zoom out">−</button><button type="button" id="rs" aria-label="Reset route map" title="Reset route map">⟲</button><button type="button" id="me" aria-label="My location" title="My location">📍</button></div><div id="mnote" hidden>Street tiles can't load here (blocked or offline), so you see routes and buses on a plain background. Host this page on your own site, or open it in a normal browser, to see the full street map.</div><div class="attr">© OpenStreetMap contributors</div>`;
+  $("#zi").onclick=()=>zoom(1);$("#zo").onclick=()=>zoom(-1);
+  $("#rs").onclick=()=>{hl=null;route();fitRoute();notify("Map reset. Your pickup and final stop are unchanged.")};
+  $("#me").onclick=()=>{if(!loc){locate();return}V.la=loc.la;V.lg=loc.lg;V.z=14;redraw()};
+  mapEl.addEventListener("pointerdown",e=>{if(e.target.closest(".ctl"))return;drag={x:e.clientX,y:e.clientY,m:0};mapEl.setPointerCapture(e.pointerId)});
+  mapEl.addEventListener("pointermove",e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.m+=Math.abs(dx)+Math.abs(dy);const c=proj(V.la,V.lg,V.z);[V.la,V.lg]=unp(c[0]-dx,c[1]-dy,V.z);redraw()});
+  mapEl.addEventListener("pointerup",e=>{if(drag&&drag.m<6){const g=document.elementFromPoint(e.clientX,e.clientY)?.closest("[data-n]");if(g){sel=g.dataset.n;route()}}drag=null});
+  let wt=0;mapEl.addEventListener("wheel",e=>{e.preventDefault();if(Date.now()-wt>180){wt=Date.now();zoom(e.deltaY<0?1:-1)}},{passive:false});
+  addEventListener("resize",redraw);
+  if(!roadsOn){roadsOn=1;loadRoads()}}
+async function loadRoads(){for(const x of BUSES){const key="tmb_road_"+x.no+"_"+x.s.join("-");let g=store.get(key,null);
+  if(!g){try{const r=await fetch("https://router.project-osrm.org/route/v1/driving/"+x.s.map(i=>PL[i].lg+","+PL[i].la).join(";")+"?overview=full&geometries=geojson",{signal:AbortSignal.timeout(12000)}),j=await r.json(),c=j.routes[0].geometry.coordinates,st=Math.ceil(c.length/700);g=c.filter((_,i)=>i%st===0||i===c.length-1).map(q=>[q[1],q[0]]);store.set(key,g)}catch{continue}}
+  x.setRoad(g);redraw()}}
+function drawTiles(){const w=MW(),h=MH(),z=V.z,n=2**z,c=proj(V.la,V.lg,z),L=c[0]-w/2,T=c[1]-h/2,want=new Set();
+  for(let x=Math.floor(L/TS);x<=Math.floor((L+w)/TS);x++)for(let y=Math.floor(T/TS);y<=Math.floor((T+h)/TS);y++){if(y<0||y>=n)continue;const k=z+"/"+x+"/"+y;want.add(k);let im=TC.get(k);
+    if(!im){im=new Image();im.alt="";im.draggable=false;im.onload=()=>{tileOk=1;$("#mnote").hidden=true};im.onerror=()=>{if(++tileErr>=3&&!tileOk)$("#mnote").hidden=false};im.src=`https://tile.openstreetmap.org/${z}/${((x%n)+n)%n}/${y}.png`;TC.set(k,im);$("#tiles").appendChild(im)}
+    im.style.left=Math.round(x*TS-L)+"px";im.style.top=Math.round(y*TS-T)+"px"}
+  for(const[k,im]of TC)if(!want.has(k)){im.remove();TC.delete(k)}
+  $("#tiles").className=isDark()?"dk":""}
+function busDots(t,a,b){return BUSES.map((x,k)=>{const s=x.state(t),q=x.pos(s.m),[px,py]=P(q.la,q.lg),on=x.no===sel,mt=x.serves(a,b);
+  return`<g data-n="${x.no}" style="cursor:pointer" transform="translate(${px.toFixed(1)} ${py.toFixed(1)})" opacity="${s.wait?.45:mt||on?1:.85}"><circle r="${on?15:mt?12:9}" fill="${COL[k]}" stroke="#fff" stroke-width="2.5"/><text y="${on?4:3}" text-anchor="middle" font-size="${on?11:mt?10:8}" font-weight="800" fill="#10141f" pointer-events="none">${x.no.slice(4)}</text></g>`}).join("")}
+function drawMap(a,b){mapInit();drawTiles();
+  const F=BUSES.find(x=>x.no===sel),seg=new Set(F&&F.serves(a,b)?F.s.slice(F.s.indexOf(a),F.s.indexOf(b)+1):[]),pl=pts=>pts.map(q=>P(q[0],q[1]).map(Math.round).join(",")).join(" ");
+  const lines=BUSES.map((x,k)=>{const h=x.no===hl||x.no===sel,pts=x.road||x.s.map(i=>[PL[i].la,PL[i].lg]);return`<polyline points="${pl(pts)}" fill="none" stroke="#10141f" stroke-opacity="${h?.5:0}" stroke-width="${h?9:0}" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${pl(pts)}" fill="none" stroke="${COL[k]}" stroke-width="${h?5:3}" stroke-linecap="round" stroke-linejoin="round" opacity="${h?1:.6}"/>`}).join("");
+  const stops=PL.map(p=>{const hot=p.i===a||p.i===b||p.i===C||seg.has(p.i);if(!hot&&V.z<10)return"";const[x,y]=P(p.la,p.lg);if(x<-20||y<-20||x>MW()+20||y>MH()+20)return"";const col=p.i===a?"#38e1ff":p.i===b?"#ff5c5c":p.i===C?"#f2d794":"#fff";
+    return`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${hot?6:3.5}" fill="${col}" stroke="#10141f" stroke-width="2"/>${hot||V.z>=11?`<text x="${(x+9).toFixed(1)}" y="${(y+4).toFixed(1)}" font-size="${hot?12:10}" font-weight="${hot?800:600}" fill="${isDark()?"#fff":"#10141f"}" stroke="${isDark()?"#08101f":"#fff"}" stroke-width="3" paint-order="stroke">${esc(p.n==="Jyothi Engineering College"?"JECC (College)":p.n)}</text>`:""}`}).join("");
+  $("#ov").innerHTML=lines+stops+`<g id="um"></g><g id="bm">${busDots(Date.now()/1000*SPEED/60,a,b)}</g>`;drawUser()}
+/* ---- state ---- */
+let me=null;const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}};
+async function api(path,body){try{const r=await fetch(path,{method:body?"POST":"GET",headers:{"Content-Type":"application/json",Authorization:"Bearer "+(store.get("tmb_token","")||"")},body:body?JSON.stringify(body):undefined});const j=await r.json();j.ok=r.ok;return j}catch{return{ok:false,error:"Server not reachable"}}}
+async function hash(u,p){const s="tmb:"+u+":"+p;try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch{let h=5381;for(const c of s)h=(h*33^c.charCodeAt(0))>>>0;return"f"+h}}
+let mode="in";
+function authUI(){
+  $("#authbox").innerHTML=`<div class="tabs"><button type="button" id="ti" class="${mode==="in"?"on":""}">Log in</button><button type="button" id="tu" class="${mode==="up"?"on":""}">Create account</button></div>
+  ${mode==="up"?`<label>Full name<input id="nm" autocomplete="name"></label><label>I am a<select id="rl"><option value="student">Student</option><option value="driver">Bus driver</option></select></label><div id="dx" hidden><label>Your bus<select id="db2">${RT.map(r=>`<option>${r[0]}</option>`).join("")}</select></label><label>Driver code<input id="dc" autocomplete="off"></label></div>`:""}
+  <label>Username<input id="un" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+  <label>Password<input id="pw" type="password" autocomplete="${mode==="up"?"new-password":"current-password"}"></label>
+  <div class="err" id="aerr" role="alert"></div>
+  <button class="btn" type="button" id="go" style="width:100%">${mode==="up"?"Create account":"Log in"}</button>
+  `;
+  $("#ti").onclick=()=>{mode="in";authUI()};$("#tu").onclick=()=>{mode="up";authUI()};
+  $("#go").onclick=auth;if($("#rl"))$("#rl").onchange=e=>$("#dx").hidden=e.target.value!=="driver";
+  /* FIX: the old handler returned false for every key, which cancelled typing and Backspace. Now only Enter is handled and normal keys are untouched. */
+  for(const el of[$("#un"),$("#pw")])el.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();auth()}});
+  $("#un").focus();
+}
+async function auth(){
+  const err=m=>$("#aerr").textContent=m,u=$("#un").value.trim().toLowerCase(),p=$("#pw").value;
+  if(!/^[a-z0-9_.]{3,20}$/.test(u))return err("Username: 3 to 20 letters, numbers, dots or underscores.");
+  if(p.length<6)return err("Password needs at least 6 characters.");
+  const body={username:u,password:p};
+  if(mode==="up"){body.name=$("#nm").value.trim();body.role=$("#rl").value;if(body.role==="driver"){body.busNo=$("#db2").value;body.code=$("#dc").value}}
+  const r=await api(mode==="up"?"/api/register":"/api/login",body);
+  if(!r.ok)return err(r.error||"Something went wrong.");
+  store.set("tmb_token",r.token);start(r.user);
+}
+function showLogin(){$("#login").hidden=false;$("#site").hidden=true;mode="in";authUI()}
+function nav(){$("#navauth").innerHTML=me?`<button class="btn ghost" id="lo">Log out</button>`:"";if(me)$("#lo").onclick=()=>{api("/api/logout",{});store.set("tmb_token",null);me=null;nav();showLogin()}}
+function start(u){me=u;if(!me)return showLogin();
+  $("#login").hidden=true;$("#site").hidden=false;initFx();$("#hi").textContent="Hi, "+me.name;nav();
+  const grp=(d,t)=>`<optgroup label="${t}">${PL.filter(p=>p.d===d).map(p=>`<option value="${p.i}">${esc(p.n)}</option>`).join("")}</optgroup>`;
+  const o=grp("T","Thrissur district")+grp("P","Palakkad district");
+  $("#pk").innerHTML=o;$("#fn").innerHTML=o;$("#pk").value=me.pickup;$("#fn").value=me.final;if(isPM){$("#pk").value=me.final;$("#fn").value=me.pickup}tabs();
+  $("#pk").onchange=$("#fn").onchange=()=>{const q=isPM?[+$("#fn").value,+$("#pk").value]:[+$("#pk").value,+$("#fn").value];me.pickup=q[0];me.final=q[1];api("/api/prefs",{pickup:me.pickup,final:me.final});sel=null;fired={};route();fitRoute()};
+  $("#dbus").innerHTML=BUSES.map(x=>`<option>${x.no}</option>`).join("");$("#drv").hidden=me.role!=="driver";if(me.busNo)$("#dbus").value=me.busNo;mapInit();route();fitRoute()}
+let fired={};
+function route(){const a=+$("#pk").value,b=+$("#fn").value;
+  if(a===b){$("#rerr").textContent="Pickup and final stop must be different.";$("#buses").innerHTML="";return}
+  $("#rerr").textContent="";const m=BUSES.filter(x=>x.serves(a,b));
+  if(m.length&&!m.find(x=>x.no===sel))sel=m[0].no;
+  drawMap(a,b);drawUser();render()}
+const fmt=m=>m<1?"under 1 min":m<60?Math.round(m)+" min":Math.floor(m/60)+" h "+Math.round(m%60)+" min";
+function notify(t){try{if("Notification" in window&&Notification.permission==="granted")new Notification("TrackMyBus - Jyothi College Bus Tracker",{body:t})}catch{}const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(notify.t);notify.t=setTimeout(()=>e.classList.remove("on"),5000)}
+function render(){
+  if(!me||$("#app").hidden)return;
+  const a=+$("#pk").value,b=+$("#fn").value;if(a===b)return;
+  const t=Date.now()/1000*SPEED/60,m=BUSES.filter(x=>x.serves(a,b)),box=$("#buses");renderAll(t,a,b);let best=null,bv=1e9;m.forEach(x=>{const e=x.cum[x.s.indexOf(a)]-x.state(t).m;if(e>.05&&e<bv){bv=e;best=x.no}});
+  if(!m.length){const via=BUSES.filter(x=>x.s.includes(a)).map(x=>x.no);
+    box.innerHTML=`<div class="bus"><b>No direct bus</b><p>No bus runs from <b>${esc(PL[a].n)}</b> to <b>${esc(PL[b].n)}</b>.${via.length?" Buses from your pickup: <b>"+via.join(", ")+"</b>. Try choosing a later stop on their route.":" No bus serves this pickup yet."}</p></div>`;return}
+  let dots="";
+  box.innerHTML=m.map(x=>{const st=x.state(t),i=x.s.indexOf(a),j=x.s.indexOf(b),ci=x.s.length-1;
+    const eP=x.cum[i]-st.m,eB=x.cum[j]-st.m,eC=x.dur-st.m,late=Math.round(st.lag);
+    let tag,msg;
+    if(st.arrived){tag=`<span class="tag done">${x.pm?"Trip complete":"Arrived at college"}</span>`;msg=`<b>${x.no}</b> has reached ${esc(PL[x.s[ci]].n)}. Next trip starts shortly.`;if(!fired[x.no+"a"]){fired[x.no+"a"]=1;if(x.no===sel)notify(x.no+(x.pm?" has finished its trip":" has arrived at college"))}}
+    else{if(st.m>=0||true)fired[x.no+"a"]=0;
+      tag=st.wait?`<span class="tag ok">${st.tt?"Departs "+x.dep:"Departing soon"}</span>`:late>=2?`<span class="tag late">Late by ${late} min</span>`:`<span class="tag ok">On time</span>`;
+      const pk=eP>0.05?`Reaches <b>${esc(PL[a].n)}</b> in <b>${fmt(eP)}</b>`:`<b>Passed ${esc(PL[a].n)}</b>`;
+      msg=`${pk}<br>Reaches <b>${esc(PL[b].n)}</b> in <b>${fmt(Math.max(eB,0))}</b>${!x.pm&&x.s[ci]!==b?`<br>Reaches <b>college</b> in <b>${fmt(Math.max(eC,0))}</b>`:""}`;
+      if(eP>0&&eP<=5&&!fired[x.no+"p"]){fired[x.no+"p"]=1;if(x.no===sel)notify(x.no+" is "+fmt(eP)+" from "+PL[a].n)}if(eP<-1)fired[x.no+"p"]=0}
+    return`<div class="bus ${x.no===sel?"on":""}" data-n="${x.no}"><div class="t"><span>🚌 ${x.no}${st.live?' <span class="tag ok">● LIVE</span>':''}${x.no===best?' <span class="mu">· next to arrive</span>':""}</span>${tag}</div><p>${msg}</p><div class="bar"><i style="width:${Math.round(Math.max(0,Math.min(1,st.m/x.dur))*100)}%"></i></div></div>`}).join("");
+  
+  box.querySelectorAll(".bus").forEach(e=>e.onclick=()=>{sel=e.dataset.n;route()});
+}
+function drawUser(){const g=$("#um");if(!g||!loc)return;const[x,y]=P(loc.la,loc.lg),pk=PL[cur()[0]],[px,py]=P(pk.la,pk.lg),r=Math.max(10,(loc.acc||30)/(156543*Math.cos(loc.la*Math.PI/180)/2**V.z));
+  g.innerHTML=`<line x1="${x}" y1="${y}" x2="${px}" y2="${py}" stroke="#4285f4" stroke-width="3.5" stroke-dasharray="2 7" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="${r}" fill="#4285f4" opacity=".15"/><circle class="pulse" cx="${x}" cy="${y}" r="8" fill="#4285f4"/><circle cx="${x}" cy="${y}" r="7" fill="#4285f4" stroke="#fff" stroke-width="3"/><text x="${x+12}" y="${y-10}" font-size="12" font-weight="800" fill="#fff" stroke="#08101f" stroke-width="3" paint-order="stroke">You</text>`}
+function locate(){const m=$("#youmsg");if(!navigator.geolocation){m.textContent="This browser does not support location.";return}
+  if(wid!=null)navigator.geolocation.clearWatch(wid);m.textContent="Finding your location…";
+  wid=navigator.geolocation.watchPosition(p=>{const f=!loc;loc={la:p.coords.latitude,lg:p.coords.longitude,acc:p.coords.accuracy};if(f){const pk=PL[cur()[0]];fit([[loc.la,loc.lg],[pk.la,pk.lg]]);notify("Location found. Showing you and your pickup stop.")}redraw();render()},e=>{m.textContent=e.code===1?"Location is blocked. Allow it in your browser site settings, then try again.":"Could not get your location. Try again outdoors."},{enableHighAccuracy:true,maximumAge:5000,timeout:15000})}
+function renderAll(t,a,b){
+  const st=BUSES.map(x=>x.state(t));if($("#bm")&&!drag)$("#bm").innerHTML=busDots(t,a,b);
+  $("#all").innerHTML=`<h3 style="font-size:22px;margin-bottom:6px">All college buses</h3><p class="mu" style="margin:0 0 8px">${BUSES.filter(x=>x.isLive).length} live from drivers · rest simulated · updated ${new Date().toLocaleTimeString()}. Tap a bus to highlight its route.</p>`+BUSES.map((x,k)=>{const s=st[k],late=Math.round(s.lag),
+    tag=s.arrived?'<span class="tag done">At college</span>':s.wait?`<span class="tag ok">${s.tt?"Departs "+x.dep:"Departing soon"}</span>`:late>=2?`<span class="tag late">Late ${late} min</span>`:'<span class="tag ok">On time</span>',
+    eta=s.arrived?"Reached college":"College in "+fmt(Math.max(x.dur-s.m,0));
+    return`<div class="row ${x.no===hl?"on":""}" data-n="${x.no}"><b><span class="swatch" style="background:${COL[k]}"></span>${x.no}${x.isLive?' <span class="tag ok">● LIVE</span>':''}${x.serves(a,b)?' <span class="mu">· serves your route</span>':""}</b>${tag}<small>${x.s.map(i=>PL[i].n==="Jyothi Engineering College"?"College":PL[i].n).join(" → ")}</small><small><b style="color:var(--tx)">${eta}</b> · departs ${x.dep} · ${x.pm?"last stop ~":"at college by "}${due(x)}</small></div>`}).join("");
+  $("#all").querySelectorAll(".row").forEach(e=>e.onclick=()=>{hl=hl===e.dataset.n?null:e.dataset.n;route()});
+  updateYou(t,a,b)}
+function updateYou(t,a,b){const m=$("#youmsg");if(!m||!loc)return;const pk=PL[a],d=hav(loc,pk),walk=d/5*60,drive=d/30*60,B=BUSES.find(x=>x.no===sel);
+  const q=p=>p.la+","+p.lg,gl=md=>`https://www.google.com/maps/dir/?api=1&origin=${q(loc)}&destination=${q(pk)}&travelmode=${md}`;
+  let adv="";if(B&&B.serves(a,b)){const e=B.cum[B.s.indexOf(a)]-B.state(t).m,tm=d<2?walk:drive;
+    adv=e<=0.05?`${B.no} has already passed ${esc(pk.n)}.`:e>=tm?`${B.no} reaches ${esc(pk.n)} in ${fmt(e)}. Leave within ${fmt(e-tm)} to catch it.`:`${B.no} reaches ${esc(pk.n)} in ${fmt(e)}, but you need ${fmt(tm)}. You may miss it.`}
+  m.innerHTML=d>150?`You are ${Math.round(d)} km from ${esc(pk.n)}, outside this map area. It pins you at the edge.`:`<b style="color:var(--tx)">${d.toFixed(1)} km</b> from ${esc(pk.n)} · 🚶 ${fmt(walk)} · 🚗 ${fmt(drive)}<br>${adv}<br><a href="${gl("walking")}" target="_blank" rel="noopener">Walk there in Google Maps</a><a href="${gl("driving")}" target="_blank" rel="noopener">Drive there</a><a href="https://www.google.com/maps/dir/?api=1&origin=${q(pk)}&destination=${q(PL[b])}&travelmode=driving" target="_blank" rel="noopener">Bus route in Google Maps</a>`}
+$("#locBtn").onclick=locate;
+setInterval(()=>{const g=$("#bm");if(g&&me&&!drag)g.innerHTML=busDots(Date.now()/1000*SPEED/60,...cur())},1000);
+setInterval(render,3000/ (SPEED/20));
+let dbx=null,dwid=null,dlast=0;
+function initLive(){setInterval(async()=>{const a=await api("/api/live");if(!a||a.error)return;const all=[...AM,...PM];all.forEach(b=>b.live=null);a.forEach(v=>all.forEach(b=>{if(b.no===v.no)b.live={la:v.la,lg:v.lg,t:Date.now()-v.age}}))},3000)}
+const did=n=>n.replace(" ","");
+$("#dgo").onclick=()=>{const m=$("#dmsg"),no=$("#dbus").value;
+  if(dwid!=null){navigator.geolocation.clearWatch(dwid);dwid=null;$("#dgo").textContent="Start sharing";m.textContent="Stopped.";api("/api/driver/stop",{no});return}
+  if(!me||me.role!=="driver"){m.textContent="Only driver accounts can share a bus location.";return}
+  if(!navigator.geolocation){m.textContent="This device has no GPS.";return}
+  m.textContent="Starting GPS…";$("#dgo").textContent="Stop sharing";
+  dwid=navigator.geolocation.watchPosition(async p=>{if(Date.now()-dlast<4000)return;dlast=Date.now();const r=await api("/api/driver/location",{no,la:p.coords.latitude,lg:p.coords.longitude});m.textContent=r.ok?"🔴 Sharing "+no+" live · "+new Date().toLocaleTimeString():"Could not share: "+(r.error||"error")},
+    ()=>{m.textContent="Location blocked. Allow GPS for this page.";$("#dgo").textContent="Start sharing";dwid=null},{enableHighAccuracy:true,maximumAge:2000})};
+$("#alBtn").onclick=async()=>{if(!("Notification" in window))return notify("Alerts are not supported here. In-page alerts still work.");const r=await Notification.requestPermission();notify(r==="granted"?"Alerts on. You'll be told when your bus is 5 min away.":"Alerts blocked. In-page alerts still work.")};
+$("#shBtn").onclick=async()=>{const[a,b]=cur(),B=BUSES.find(x=>x.no===sel);if(!B||!B.serves(a,b))return notify("Pick a route with a bus first.");
+  const t=Date.now()/1000*SPEED/60,st=B.state(t),e=B.cum[B.s.indexOf(a)]-st.m,l=Math.round(st.lag),
+    txt=`${B.no} ${st.arrived?"has reached college":l>=2?"is late by "+l+" min":"is on time"}${e>.05?`, reaches ${PL[a].n} in ${fmt(e)}`:""} (${st.live?"live GPS":"simulated"}). TrackMyBus - Jyothi College Bus Tracker`;
+  try{navigator.share?await navigator.share({text:txt}):(await navigator.clipboard.writeText(txt),notify("Status copied"))}catch{}};
+function tabs(){$("#mAM").classList.toggle("on",!isPM);$("#mPM").classList.toggle("on",isPM);$("#demoBtn").textContent=DEMO?"Demo: ON":"Demo: OFF"}
+function setMode(pm){if(isPM===pm)return;isPM=pm;BUSES=pm?PM:AM;sel=null;hl=null;fired={};const a=$("#pk").value;$("#pk").value=$("#fn").value;$("#fn").value=a;tabs();route();fitRoute()}
+$("#mAM").onclick=()=>setMode(false);$("#mPM").onclick=()=>setMode(true);
+$("#demoBtn").onclick=()=>{DEMO=!DEMO;tabs();fired={};render();redraw();notify(DEMO?"Demo on: buses run in a fast simulation.":"Demo off: buses follow the real timetable.")};
+let fx=0;
+function countUp(id,n){const el=$(id);let t0=null;const f=ts=>{t0??=ts;const k=Math.min(1,(ts-t0)/1300);el.textContent=Math.round(n*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
+function initFx(){if(fx)return;fx=1;countUp("#sN",PL.length);countUp("#sB",BUSES.length);
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);setTimeout(()=>e.target.classList.remove("rv","in"),1000)}}),{threshold:.15});
+  document.querySelectorAll("#features .card,#how .card,.head").forEach((e,i)=>{e.classList.add("rv");e.style.transitionDelay=(i%3)*90+"ms";io.observe(e)})}
+$("#theme").onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue("--bg").trim()==="#0a0f1f";r.dataset.theme=d?"light":"dark";drawMap(+$("#pk").value,+$("#fn").value);drawUser();render()};
+initLive();
+(async()=>{const r=store.get("tmb_token","")?await api("/api/me"):null;r&&r.ok?start(r.user):showLogin()})();
+</script></body></html>
